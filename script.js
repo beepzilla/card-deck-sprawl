@@ -1,5 +1,6 @@
 const images = gsap.utils.toArray(".item");
 
+const imageSize = images.length;
 const total = images.length;
 const degree = 360 / total;
 
@@ -7,24 +8,54 @@ const init = () => {
   const timeline = gsap.timeline();
 
   images.forEach((image, index) => {
-    const rotation = index * degree;
+    const sign = Math.floor((index / 2) % 2) ? 1 : -1;
+    const value = Math.floor((index + 4) / 4) * 4;
+    const rotation = index > imageSize - 3 ? 0 : sign * value;
+    console.log(rotation);
 
     gsap.set(image, {
       rotation: rotation,
-      scale: 1, // Adjust scale to make images smaller
-      transformOrigin: "center 200vh"
+      scale: 0.5
     });
 
     timeline.from(
       image,
       {
+        x: () =>
+          index % 2
+            ? window.innerWidth + image.clientWidth * 4
+            : -window.innerWidth - image.clientWidth * 4,
+        y: () => window.innerHeight - image.clientHeight,
+        rotation: index % 2 ? 200 : -200,
         scale: 4,
-        opacity: 0,
+        opacity: 1,
         ease: "power4.out",
         duration: 1,
-        delay: 0.15 * index
+        delay: 0.15 * Math.floor(index / 2)
       },
       0
+    );
+
+    let rotationAngle = index * degree;
+    timeline.to(
+      image,
+      {
+        scale: 1,
+        duration: 0
+      },
+      0.15 * (imageSize / 2 - 1) + 1
+    );
+
+    timeline.to(
+      image,
+      {
+        transformOrigin: "center 200vh",
+        rotation:
+          index > imageSize / 2 ? -degree * (imageSize - index) : rotationAngle,
+        duration: 1,
+        ease: "power1.out"
+      },
+      0.15 * (imageSize / 2 - 1) + 1
     );
   });
 };
@@ -33,6 +64,7 @@ const draggable = () => {
   let start = 0;
   Draggable.create(".items", {
     type: "rotation",
+
     onDragStart: function () {
       start = this.rotation;
     },
@@ -40,23 +72,23 @@ const draggable = () => {
       const rotation = this.rotation;
       const offset = Math.abs(rotation - start);
       if (rotation > start) {
-        if (offset < degree / 2) {
+        if (rotation - start < degree / 2) {
           gsap.to(".items", {
             rotation: `-=${offset}`
           });
         } else {
           gsap.to(".items", {
-            rotation: `+=${degree - offset}`
+            rotation: `+=${2 * degree - offset}`
           });
         }
       } else {
-        if (offset < degree / 2) {
+        if (Math.abs(rotation - start) < degree / 2) {
           gsap.to(".items", {
             rotation: `+=${offset}`
           });
         } else {
           gsap.to(".items", {
-            rotation: `-=${degree - offset}`
+            rotation: `-=${2 * degree - offset}`
           });
         }
       }
