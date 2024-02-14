@@ -11,10 +11,11 @@ const init = () => {
     const sign = Math.floor((index / 2) % 2) ? 1 : -1;
     const value = Math.floor((index + 4) / 4) * 4;
     const rotation = index > imageSize - 3 ? 0 : sign * value;
+    console.log(rotation);
 
     gsap.set(image, {
       rotation: rotation,
-      scale: 0.5,
+      scale: 0.5
     });
 
     timeline.from(
@@ -30,7 +31,7 @@ const init = () => {
         opacity: 1,
         ease: "power4.out",
         duration: 1,
-        delay: 0.15 * Math.floor(index / 2),
+        delay: 0.15 * Math.floor(index / 2)
       },
       0
     );
@@ -40,7 +41,7 @@ const init = () => {
       image,
       {
         scale: 1,
-        duration: 0,
+        duration: 0
       },
       0.15 * (imageSize / 2 - 1) + 1
     );
@@ -52,7 +53,7 @@ const init = () => {
         rotation:
           index > imageSize / 2 ? -degree * (imageSize - index) : rotationAngle,
         duration: 1,
-        ease: "power1.out",
+        ease: "power1.out"
       },
       0.15 * (imageSize / 2 - 1) + 1
     );
@@ -63,6 +64,7 @@ const draggable = () => {
   let start = 0;
   Draggable.create(".items", {
     type: "rotation",
+
     onDragStart: function () {
       start = this.rotation;
     },
@@ -72,25 +74,25 @@ const draggable = () => {
       if (rotation > start) {
         if (rotation - start < degree / 2) {
           gsap.to(".items", {
-            rotation: `-=${offset}`,
+            rotation: `-=${offset}`
           });
         } else {
           gsap.to(".items", {
-            rotation: `+=${2 * degree - offset}`,
+            rotation: `+=${2 * degree - offset}`
           });
         }
       } else {
         if (Math.abs(rotation - start) < degree / 2) {
           gsap.to(".items", {
-            rotation: `+=${offset}`,
+            rotation: `+=${offset}`
           });
         } else {
           gsap.to(".items", {
-            rotation: `-=${2 * degree - offset}`,
+            rotation: `-=${2 * degree - offset}`
           });
         }
       }
-    },
+    }
   });
 };
 
