@@ -11,7 +11,7 @@ const init = () => {
 
     gsap.set(image, {
       rotation: rotation,
-      scale: 0.8, // Adjust scale to make images smaller
+      scale: 1.2, // Adjust scale to make images smaller
       transformOrigin: "center 200vh"
     });
 
