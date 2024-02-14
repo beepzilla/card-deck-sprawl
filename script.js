@@ -8,70 +8,7 @@ const init = () => {
   const timeline = gsap.timeline();
 
   images.forEach((image, index) => {
-    const siconst images = gsap.utils.toArray(".item");
-const total = images.length;
-const degree = 360 / total;
-
-const init = () => {
-  const timeline = gsap.timeline();
-
-  images.forEach((image, index) => {
-    const rotation = index * degree;
-
-    gsap.set(image, {
-      rotation: rotation,
-      transformOrigin: "center 200vh",
-      scale: 0.8, // Adjust the scale to create space between images
-    });
-
-    timeline.from(
-      image,
-      {
-        x: () =>
-          index % 2
-            ? window.innerWidth + image.clientWidth * 2
-            : -window.innerWidth - image.clientWidth * 2,
-        y: () => window.innerHeight - image.clientHeight,
-        rotation: index % 2 ? 200 : -200,
-        scale: 4,
-        opacity: 1,
-        ease: "power4.out",
-        duration: 1,
-        delay: 0.15 * index,
-      },
-      0
-    );
-  });
-};
-
-const draggable = () => {
-  let start = 0;
-  Draggable.create(".items", {
-    type: "rotation",
-
-    onDragStart: function () {
-      start = this.rotation;
-    },
-    onDragEnd: function () {
-      const rotation = this.rotation;
-      const diff = rotation - start;
-      const rotationCorrection = diff % degree;
-      const rotationAdjustment =
-        Math.abs(rotationCorrection) < degree / 2
-          ? -rotationCorrection
-          : (degree - Math.abs(rotationCorrection)) * Math.sign(diff);
-
-      gsap.to(".items", {
-        rotation: `+=${rotationAdjustment}`,
-        ease: "power1.out",
-      });
-    },
-  });
-};
-
-init();
-draggable();
-gn = Math.floor((index / 2) % 2) ? 1 : -1;
+    const sign = Math.floor((index / 2) % 2) ? 1 : -1;
     const value = Math.floor((index + 4) / 4) * 4;
     const rotation = index > imageSize - 3 ? 0 : sign * value;
     console.log(rotation);
